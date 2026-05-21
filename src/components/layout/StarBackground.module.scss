@@ -1,0 +1,110 @@
+@use 'sass:math';
+@use 'sass:string';
+
+// Estrellas normales: box-shadow sin blur
+@function stars($n, $color: #ffffff) {
+  $value: '#{math.random(2000)}px #{math.random(2000)}px #{$color}';
+  @for $i from 2 through $n {
+    $value: '#{$value}, #{math.random(2000)}px #{math.random(2000)}px #{$color}';
+  }
+  @return string.unquote($value);
+}
+
+// Estrellas con glow: blur + spread para que se vean grandes y brillantes
+@function glowing-stars($n, $color, $blur, $spread) {
+  $value: '#{math.random(2000)}px #{math.random(2000)}px #{$blur}px #{$spread}px #{$color}';
+  @for $i from 2 through $n {
+    $value: '#{$value}, #{math.random(2000)}px #{math.random(2000)}px #{$blur}px #{$spread}px #{$color}';
+  }
+  @return string.unquote($value);
+}
+
+// ── Capas compiladas en build time ──
+$micro:   stars(700);                              // 1px — blancas, muchas
+$small:   stars(350, #e8e6f8);                    // 2px — blanco-violáceo
+$medium:  stars(180, #c0bce8);                    // 3px — violáceo
+$large:   stars(60,  #766ec8);                    // 4px — slate blue
+$giant:   glowing-stars(15, #a09ae0, 3, 1);      // 5px + glow — las más brillantes
+
+// ── Mixin reutilizable por capa ──
+@mixin star-layer($size, $shadows, $duration, $delay: 0s) {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 0;
+  pointer-events: none;
+  width: #{$size}px;
+  height: #{$size}px;
+  background: transparent;
+  box-shadow: $shadows;
+  animation: floatLeft $duration linear $delay infinite;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 2000px;
+    width: #{$size}px;
+    height: #{$size}px;
+    background: transparent;
+    box-shadow: $shadows;
+  }
+}
+
+// ── Capa 1: micro (1px) — twinkle only ──
+.starsMicro {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 1px;
+    height: 1px;
+    background: transparent;
+    box-shadow: $micro;
+  }
+
+  &::before { animation: twinkle 5s ease-in-out infinite alternate; }
+  &::after  { animation: twinkle 7s ease-in-out 3s infinite alternate-reverse; opacity: 0.5; }
+}
+
+// ── Capa 2: small (2px) — float lento + twinkle ──
+.starsSmall {
+  @include star-layer(2, $small, 160s);
+  animation: floatLeft 160s linear infinite, twinkle 6s ease-in-out infinite alternate;
+}
+
+// ── Capa 3: medium (3px) — float medio ──
+.starsMedium {
+  @include star-layer(3, $medium, 120s, 10s);
+}
+
+// ── Capa 4: large (4px) — float más lento ──
+.starsLarge {
+  @include star-layer(4, $large, 200s, 5s);
+  animation: floatLeft 200s linear 5s infinite, twinkle 10s ease-in-out infinite alternate;
+}
+
+// ── Capa 5: giant (5px + glow) — muy lentas, muy visibles ──
+.starsGiant {
+  @include star-layer(5, $giant, 280s, 20s);
+  animation: floatLeft 280s linear 20s infinite, twinkle 12s ease-in-out infinite alternate;
+}
+
+// ── Keyframes ──
+@keyframes floatLeft {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-2000px); }
+}
+
+@keyframes twinkle {
+  0%   { opacity: 0.2; }
+  50%  { opacity: 1; }
+  100% { opacity: 0.4; }
+}
