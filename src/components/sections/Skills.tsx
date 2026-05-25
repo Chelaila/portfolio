@@ -2,7 +2,7 @@ import { skillCategories } from "@/data/skills";
 
 export default function Skills() {
   return (
-    <section id="skills" className="min-h-screen px-12 py-20 border-t border-indigo-velvet">
+    <section id="skills" className="min-h-screen px-6 md:px-12 py-20 border-t border-indigo-velvet">
       <h2 className="text-3xl font-bold text-text-primary mb-2">Habilidades</h2>
       <p className="text-text-muted text-sm mb-12">Tecnologías y herramientas con las que trabajo</p>
 

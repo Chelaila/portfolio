@@ -1,11 +1,11 @@
 export default function Home() {
   return (
-    <section id="home" className="min-h-screen flex items-center px-12 py-20">
+    <section id="home" className="min-h-screen flex items-center px-6 md:px-12 py-20">
       <div className="max-w-2xl">
         <p className="text-slate-blue-light text-sm font-mono mb-4 tracking-widest uppercase">
           Bienvenido a mi portfolio
         </p>
-        <h1 className="text-5xl font-bold text-text-primary leading-tight mb-4">
+        <h1 className="text-4xl md:text-5xl font-bold text-text-primary leading-tight mb-4">
           Marcelo Alonso
           <br />
           <span className="text-slate-blue">Molina Muñoz</span>

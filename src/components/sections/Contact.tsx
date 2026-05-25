@@ -23,7 +23,7 @@ const contactItems = [
 
 export default function Contact() {
   return (
-    <section id="contact" className="min-h-screen px-12 py-20 border-t border-indigo-velvet">
+    <section id="contact" className="min-h-screen px-6 md:px-12 py-20 border-t border-indigo-velvet">
       <h2 className="text-3xl font-bold text-text-primary mb-2">Contacto</h2>
       <p className="text-text-muted text-sm mb-12">¿Tienes un proyecto o propuesta? Escríbeme.</p>
 

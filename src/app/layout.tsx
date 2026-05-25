@@ -29,7 +29,7 @@ export default function RootLayout({
       <body className="h-full flex relative">
         <StarBackground />
         <Sidebar />
-        <main className="ml-64 flex-1 min-h-screen relative z-10">
+        <main className="lg:ml-64 flex-1 min-h-screen relative z-10 pt-14 lg:pt-0">
           {children}
         </main>
       </body>

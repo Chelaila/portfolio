@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+
 const navLinks = [
   { label: "Inicio", href: "#home" },
   { label: "Habilidades", href: "#skills" },
@@ -49,65 +51,116 @@ const socialLinks = [
 ];
 
 export default function Sidebar() {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const close = () => setIsOpen(false);
+
   return (
-    <aside className="fixed top-0 left-0 h-screen w-64 flex flex-col bg-electric-royal border-r border-indigo-velvet z-10">
-      {/* Perfil */}
-      <div className="p-6 border-b border-indigo-velvet">
-        <div className="w-16 h-16 rounded-full bg-indigo-velvet flex items-center justify-center mb-4 text-slate-blue-light text-2xl font-bold">
-          MM
-        </div>
-        <h1 className="text-text-primary font-bold text-base leading-tight">
-          Marcelo Molina
-        </h1>
-        <p className="text-text-muted text-xs mt-1 leading-snug">
-          Ingeniero Informático Senior
-        </p>
+    <>
+      {/* Barra superior móvil */}
+      <div className="lg:hidden fixed top-0 left-0 right-0 h-14 bg-electric-royal border-b border-indigo-velvet z-20 flex items-center justify-between px-4">
+        <span className="text-text-primary font-bold text-sm">Marcelo Molina</span>
+        <button
+          onClick={() => setIsOpen(true)}
+          aria-label="Abrir menú"
+          className="text-text-muted hover:text-text-primary p-2 rounded-md transition-colors"
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="w-6 h-6">
+            <line x1="3" y1="6" x2="21" y2="6" />
+            <line x1="3" y1="12" x2="21" y2="12" />
+            <line x1="3" y1="18" x2="21" y2="18" />
+          </svg>
+        </button>
       </div>
 
-      {/* Navegación */}
-      <nav className="flex-1 p-4">
-        <ul className="space-y-1">
-          {navLinks.map((link) => (
-            <li key={link.href}>
-              <a
-                href={link.href}
-                className="block px-3 py-2 rounded-md text-text-muted text-sm hover:text-text-primary hover:bg-indigo-velvet transition-colors duration-200"
-              >
-                {link.label}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </nav>
+      {/* Overlay */}
+      {isOpen && (
+        <button
+          aria-label="Cerrar menú"
+          className="lg:hidden fixed inset-0 bg-black/60 z-30 w-full cursor-default"
+          onClick={close}
+        />
+      )}
 
-      {/* Links sociales + CV */}
-      <div className="p-4 border-t border-indigo-velvet space-y-2">
-        {socialLinks.map((link) => (
-          <a
-            key={link.label}
-            href={link.href}
-            target={link.href.startsWith("http") ? "_blank" : undefined}
-            rel={link.href.startsWith("http") ? "noopener noreferrer" : undefined}
-            className="flex items-center gap-3 px-3 py-2 rounded-md text-text-muted text-sm hover:text-slate-blue-light hover:bg-indigo-velvet transition-colors duration-200"
-          >
-            {link.icon}
-            <span>{link.label}</span>
-          </a>
-        ))}
-
-        <a
-          href="/cv.pdf"
-          download
-          className="flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium text-slate-blue-light border border-slate-blue hover:bg-slate-blue hover:text-white transition-colors duration-200 mt-3"
+      {/* Sidebar */}
+      <aside
+        className={[
+          "fixed top-0 left-0 h-screen w-64 flex flex-col bg-electric-royal border-r border-indigo-velvet z-40",
+          "transition-transform duration-300",
+          isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0",
+        ].join(" ")}
+      >
+        {/* Botón cerrar (solo móvil) */}
+        <button
+          onClick={close}
+          aria-label="Cerrar menú"
+          className="lg:hidden absolute top-4 right-4 text-text-muted hover:text-text-primary p-1 rounded-md transition-colors"
         >
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="w-5 h-5">
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-            <polyline points="7 10 12 15 17 10" />
-            <line x1="12" y1="15" x2="12" y2="3" />
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
           </svg>
-          <span>Descargar CV</span>
-        </a>
-      </div>
-    </aside>
+        </button>
+
+        {/* Perfil */}
+        <div className="p-6 border-b border-indigo-velvet">
+          <div className="w-16 h-16 rounded-full bg-indigo-velvet flex items-center justify-center mb-4 text-slate-blue-light text-2xl font-bold">
+            MM
+          </div>
+          <h1 className="text-text-primary font-bold text-base leading-tight">
+            Marcelo Molina
+          </h1>
+          <p className="text-text-muted text-xs mt-1 leading-snug">
+            Ingeniero Informático Senior
+          </p>
+        </div>
+
+        {/* Navegación */}
+        <nav className="flex-1 p-4">
+          <ul className="space-y-1">
+            {navLinks.map((link) => (
+              <li key={link.href}>
+                <a
+                  href={link.href}
+                  onClick={close}
+                  className="block px-3 py-2 rounded-md text-text-muted text-sm hover:text-text-primary hover:bg-indigo-velvet transition-colors duration-200"
+                >
+                  {link.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+
+        {/* Links sociales + CV */}
+        <div className="p-4 border-t border-indigo-velvet space-y-2">
+          {socialLinks.map((link) => (
+            <a
+              key={link.label}
+              href={link.href}
+              target={link.href.startsWith("http") ? "_blank" : undefined}
+              rel={link.href.startsWith("http") ? "noopener noreferrer" : undefined}
+              className="flex items-center gap-3 px-3 py-2 rounded-md text-text-muted text-sm hover:text-slate-blue-light hover:bg-indigo-velvet transition-colors duration-200"
+            >
+              {link.icon}
+              <span>{link.label}</span>
+            </a>
+          ))}
+
+          <a
+            href="/cv.pdf"
+            download
+            className="flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium text-slate-blue-light border border-slate-blue hover:bg-slate-blue hover:text-white transition-colors duration-200 mt-3"
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="w-5 h-5">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+              <polyline points="7 10 12 15 17 10" />
+              <line x1="12" y1="15" x2="12" y2="3" />
+            </svg>
+            <span>Descargar CV</span>
+          </a>
+        </div>
+      </aside>
+    </>
   );
 }
